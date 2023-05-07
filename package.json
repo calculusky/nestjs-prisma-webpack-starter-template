@@ -32,11 +32,13 @@
     },
     "dependencies": {
         "@boxpositron/vre": "^1.0.0",
+        "@calculusky/transactional-email": "^1.0.4",
         "@nestjs/common": "^9.0.0",
         "@nestjs/core": "^9.0.0",
         "@nestjs/platform-express": "^9.0.0",
         "@prisma/client": "^4.13.0",
         "@sendgrid/mail": "^7.7.0",
+        "axios": "^1.4.0",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.0",
         "dotenv": "^16.0.3",
@@ -45,7 +47,8 @@
         "morgan": "^1.10.0",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
-        "rxjs": "^7.2.0"
+        "rxjs": "^7.2.0",
+        "sib-api-v3-typescript": "^2.2.2"
     },
     "devDependencies": {
         "@commitlint/cli": "^17.6.1",
