@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PaystackEvent } from "./interfaces";
+import { PaystackEvent } from "../interfaces";
 
 @Injectable()
 export class PaystackWebhookService {

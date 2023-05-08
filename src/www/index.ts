@@ -6,8 +6,8 @@ import { INestApplication, VersioningType } from "@nestjs/common";
 import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 import helmet from "helmet";
 import { AllExceptionsFilter } from "@/core/exception/http";
-import { classValidatorPipeInstance } from "@/core/validation";
-import { PrismaService } from "@/modules/core/prisma/service";
+import { classValidatorPipeInstance } from "@/core/pipe";
+import { PrismaService } from "@/modules/core/prisma/services";
 
 export interface CreateServerOptions {
     port: number;
@@ -19,9 +19,8 @@ export default async (
     options: CreateServerOptions
 ): Promise<INestApplication> => {
     const app = await NestFactory.create(AppModule, {
-        logger: false,
+        //logger: false,
     });
-
     const whitelist = options.whitelistedDomains ?? [];
 
     const corsOptions: CorsOptions = {

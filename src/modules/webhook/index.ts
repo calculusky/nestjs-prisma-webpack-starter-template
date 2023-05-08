@@ -1,13 +1,13 @@
 import { Module } from "@nestjs/common";
 import { RouterModule } from "@nestjs/core";
-import { PaystackWebHookModule } from "./paystack";
+import { PaystackWebhookModule } from "./paystack";
 
 @Module({
     imports: [
-        PaystackWebHookModule,
+        PaystackWebhookModule,
         RouterModule.register([
-            { path: "webhooks", module: PaystackWebHookModule },
+            { path: "webhooks", module: PaystackWebhookModule },
         ]),
     ],
 })
-export class WebHookModule {}
+export class WebhookModule {}

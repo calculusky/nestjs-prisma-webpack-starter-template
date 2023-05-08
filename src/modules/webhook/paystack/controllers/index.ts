@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res, VERSION_NEUTRAL } from "@nestjs/common";
 import { Response } from "express";
-import { PaystackEvent } from "./interfaces";
-import { PaystackWebhookService } from "./service";
+import { PaystackEvent } from "../interfaces";
+import { PaystackWebhookService } from "../services";
 
 @Controller({
     path: "paystack",

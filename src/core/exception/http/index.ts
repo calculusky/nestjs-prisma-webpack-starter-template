@@ -1,5 +1,5 @@
 import { isProduction } from "@/config";
-import { ValidationException } from "@/core/validation/error";
+import { ValidationException } from "@/core/pipe/error";
 import {
     ExceptionFilter,
     Catch,
@@ -44,7 +44,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
             default: {
                 const responseBody = {
                     success: false,
-                    message: exception.message ?? "Something went wrong",
+                    message:
+                        httpStatus == 500
+                            ? "Something went wrong"
+                            : exception.message,
                     stack: isProduction ? undefined : exception.stack, //only show stack in development
                 };
                 httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

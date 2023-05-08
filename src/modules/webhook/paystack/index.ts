@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { PaystackWebhookController } from "./controller";
-import { PaystackWebhookService } from "./service";
+import { PaystackWebhookController } from "./controllers";
+import { PaystackWebhookService } from "./services";
 export * from "./interfaces";
 
 @Module({
@@ -8,4 +8,4 @@ export * from "./interfaces";
     providers: [PaystackWebhookService],
     controllers: [PaystackWebhookController],
 })
-export class PaystackWebHookModule {}
+export class PaystackWebhookModule {}

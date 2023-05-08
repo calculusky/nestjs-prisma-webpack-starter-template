@@ -1,5 +1,5 @@
 import { Global, Module } from "@nestjs/common";
-import { SendgridEmailService, SendinblueEmailService } from "./service";
+import { SendgridEmailService, SendinblueEmailService } from "./services";
 
 @Global()
 @Module({
