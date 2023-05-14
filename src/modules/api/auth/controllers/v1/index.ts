@@ -1,4 +1,4 @@
-import { APIResponse } from "@/modules/api/interface";
+import { ApiResponse } from "@/utils/api-response-util";
 import { Body, Controller, Post, ValidationPipe } from "@nestjs/common";
 import { SignInDto, SignUpDto } from "../../dtos";
 import { AuthService } from "../../services";
@@ -12,14 +12,14 @@ export class AuthController {
     @Post("signup")
     async signUp(
         @Body(ValidationPipe) signUpDto: SignUpDto
-    ): Promise<APIResponse> {
+    ): Promise<ApiResponse> {
         return await this.authService.signUp(signUpDto);
     }
 
     @Post("login")
     async signIn(
         @Body(ValidationPipe) signInDto: SignInDto
-    ): Promise<APIResponse> {
+    ): Promise<ApiResponse> {
         return await this.authService.signIn(signInDto);
     }
 }

@@ -6,5 +6,5 @@ export interface RequestWithUser extends Request {
 }
 
 export interface DataStoredInToken {
-    identifier: string;
+    sub: string;
 }

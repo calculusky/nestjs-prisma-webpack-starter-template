@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
         const token = this.extractTokenFromHeader(request);
         if (!token) {
             throw new InvalidAuthTokenException(
-                "Unauthorized",
+                "Your session is unauthorized",
                 HttpStatus.UNAUTHORIZED
             );
         }
@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
                     secret: jwtSecret,
                 });
             const user = await this.userService.findUserByIdentifier(
-                payload.identifier
+                payload.sub
             );
             if (!user) {
                 throw new UserNotFoundException(
