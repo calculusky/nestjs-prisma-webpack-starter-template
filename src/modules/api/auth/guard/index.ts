@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request: RequestWithUser = context.switchToHttp().getRequest();
+        const request = context.switchToHttp().getRequest() as RequestWithUser;
         const token = this.extractTokenFromHeader(request);
         if (!token) {
             throw new InvalidAuthTokenException(
@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
             );
             if (!user) {
                 throw new UserNotFoundException(
-                    "Unauthorized",
+                    "Your session is unauthorized",
                     HttpStatus.UNAUTHORIZED
                 );
             }
@@ -53,7 +53,7 @@ export class AuthGuard implements CanActivate {
                 }
                 default: {
                     throw new AuthTokenValidationException(
-                        "Unauthorized",
+                        "Your session is unauthorized",
                         HttpStatus.UNAUTHORIZED
                     );
                 }

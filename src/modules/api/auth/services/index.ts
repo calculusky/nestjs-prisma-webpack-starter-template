@@ -7,6 +7,7 @@ import * as bcrypt from "bcryptjs";
 import { Prisma } from "@prisma/client";
 import { customAlphabet, urlAlphabet } from "nanoid";
 import { InvalidCredentialException } from "../errors";
+import { ApiResponse, buildResponse } from "@/utils/api-response-util";
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
         return await bcrypt.compare(password, hash);
     }
 
-    async signUp(options: SignUpDto) {
+    async signUp(options: SignUpDto): Promise<ApiResponse> {
         const user = await this.userService.findUserByEmail(options.email);
         if (user) {
             throw new DuplicateUserException(
@@ -36,7 +37,7 @@ export class AuthService {
             firstName: options.firstName,
             lastName: options.lastName,
             email: options.email,
-            identifier: customAlphabet(urlAlphabet, 20)(),
+            identifier: customAlphabet(urlAlphabet, 16)(),
             password: hashedPassword,
         };
 
@@ -49,16 +50,13 @@ export class AuthService {
 
         //send sms or email notification here
 
-        return {
-            success: true,
+        return buildResponse({
             message: "Account successfully created",
-            data: {
-                accessToken,
-            },
-        };
+            data: { accessToken },
+        });
     }
 
-    async signIn(options: SignInDto) {
+    async signIn(options: SignInDto): Promise<ApiResponse> {
         const user = await this.userService.findUserByEmail(options.email);
         if (!user) {
             throw new InvalidCredentialException(
@@ -82,12 +80,9 @@ export class AuthService {
             sub: user.identifier,
         });
 
-        return {
-            success: true,
-            message: "User successfully logged-in",
-            data: {
-                accessToken,
-            },
-        };
+        return buildResponse({
+            message: "User successfully logged in",
+            data: { accessToken },
+        });
     }
 }

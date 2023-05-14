@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { AuthModule } from "./auth";
 import { UserModule } from "./user";
-import { AppHealthModule } from "./_appHealth";
+import { WebExtension } from "./webExtension";
 
 @Module({
-    imports: [AppHealthModule, UserModule, AuthModule],
+    imports: [WebExtension, UserModule, AuthModule],
 })
 export class APIModule {}

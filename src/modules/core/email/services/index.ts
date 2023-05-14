@@ -10,7 +10,7 @@ export class SendgridEmailService extends TransactionalEmail<"sendgrid"> {
 }
 
 @Injectable()
-export class SendinblueEmailService extends TransactionalEmail<"sendinblue"> {
+export class BrevoEmailService extends TransactionalEmail<"sendinblue"> {
     constructor() {
         super({ apiKey: sendinblueApiKey, provider: "sendinblue" });
     }
