@@ -1,4 +1,4 @@
-import { sendgridApiKey, sendinblueApiKey } from "@/config";
+import { sendgridApiKey, brevoApiKey } from "@/config";
 import TransactionalEmail from "@calculusky/transactional-email";
 import { Injectable } from "@nestjs/common";
 
@@ -12,6 +12,6 @@ export class SendgridEmailService extends TransactionalEmail<"sendgrid"> {
 @Injectable()
 export class BrevoEmailService extends TransactionalEmail<"sendinblue"> {
     constructor() {
-        super({ apiKey: sendinblueApiKey, provider: "sendinblue" });
+        super({ apiKey: brevoApiKey, provider: "sendinblue" });
     }
 }
