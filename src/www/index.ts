@@ -8,11 +8,12 @@ import helmet from "helmet";
 import { AllExceptionsFilter } from "@/core/exception/http";
 import { classValidatorPipeInstance } from "@/core/pipe";
 import { PrismaService } from "@/modules/core/prisma/services";
+import { frontendDevOrigin, isDevEnvironment } from "@/config";
 
 export interface CreateServerOptions {
     port: number;
     production?: boolean;
-    whitelistedDomains?: string[];
+    whitelistedDomains?: any;
 }
 
 export default async (
@@ -22,16 +23,11 @@ export default async (
         //logger: false,
     });
     const whitelist = options.whitelistedDomains ?? [];
-
+    if (isDevEnvironment) {
+        whitelist.push(frontendDevOrigin);
+    }
     const corsOptions: CorsOptions = {
-        origin: async (origin, callback) => {
-            if (!origin) return callback(null, true);
-
-            if (whitelist.indexOf(origin) !== -1) {
-                return callback(null, true);
-            }
-            callback(new Error(`Not allowed by CORS - ${origin}`));
-        },
+        origin: whitelist,
         allowedHeaders: ["Authorization", "X-Requested-With", "Content-Type"],
         methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,

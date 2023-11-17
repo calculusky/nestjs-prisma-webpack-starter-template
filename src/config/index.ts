@@ -19,15 +19,11 @@ const runtimeEnvironment: RequiredEnvironment[] = [
         type: RequiredEnvironmentTypes.String,
     },
     {
-        name: "SENDGRID_API_KEY",
-        type: RequiredEnvironmentTypes.String,
-    },
-    {
-        name: "BREVO_API_KEY",
-        type: RequiredEnvironmentTypes.String,
-    },
-    {
         name: "JWT_SECRET",
+        type: RequiredEnvironmentTypes.String,
+    },
+    {
+        name: "ENCRYPT_SECRET",
         type: RequiredEnvironmentTypes.String,
     },
 ];
@@ -40,9 +36,13 @@ export const allowedDomains =
 export const isProduction: boolean = process.env.NODE_ENV === "production";
 export const port: number = parseInt(process.env.PORT ?? "4000");
 
-//email
-export const sendgridApiKey = process.env.SENDGRID_API_KEY;
-export const brevoApiKey = process.env.SENDINBLUE_API_KEY;
-
 //jwt
 export const jwtSecret = process.env.JWT_SECRET;
+
+//dev deployment env
+export const isDevEnvironment = process.env.DEV_ENVIRONMENT === "development";
+
+//encrypt
+export const encryptSecret: string = process.env.ENCRYPT_SECRET;
+
+export const frontendDevOrigin = [/^http:\/\/localhost:\d+$/];

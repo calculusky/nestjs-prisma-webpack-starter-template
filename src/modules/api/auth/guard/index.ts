@@ -8,26 +8,23 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { UserNotFoundException } from "@/modules/api/user";
-import { UserService } from "../../user/services";
-import {
-    AuthTokenValidationException,
-    InvalidAuthTokenException,
-} from "../errors";
+import * as AuthError from "../errors";
 import { DataStoredInToken, RequestWithUser } from "../interfaces";
+import { PrismaService } from "@/modules/core/prisma/services";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(
         private jwtService: JwtService,
-        private userService: UserService
+        private prisma: PrismaService
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest() as RequestWithUser;
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            throw new InvalidAuthTokenException(
-                "Your session is unauthorized",
+            throw new AuthError.MissingAuthorizationToken(
+                "Your Session is unauthorized",
                 HttpStatus.UNAUTHORIZED
             );
         }
@@ -36,9 +33,11 @@ export class AuthGuard implements CanActivate {
                 await this.jwtService.verifyAsync(token, {
                     secret: jwtSecret,
                 });
-            const user = await this.userService.findUserByIdentifier(
-                payload.sub
-            );
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    identifier: payload.sub,
+                },
+            });
             if (!user) {
                 throw new UserNotFoundException(
                     "Your session is unauthorized",
@@ -51,8 +50,15 @@ export class AuthGuard implements CanActivate {
                 case error instanceof UserNotFoundException: {
                     throw error;
                 }
+                case error.name == "PrismaClientKnownRequestError": {
+                    throw new AuthError.PrismaNetworkException(
+                        "Unable to process request. Please try again",
+                        HttpStatus.SERVICE_UNAVAILABLE
+                    );
+                }
+
                 default: {
-                    throw new AuthTokenValidationException(
+                    throw new AuthError.AuthTokenValidationException(
                         "Your session is unauthorized",
                         HttpStatus.UNAUTHORIZED
                     );

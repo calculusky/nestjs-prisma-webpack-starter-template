@@ -15,3 +15,11 @@ export class AuthTokenValidationException extends HttpException {
 export class InvalidCredentialException extends HttpException {
     name = "InvalidCredentialException";
 }
+
+export class PrismaNetworkException extends HttpException {
+    name = "PrismaNetworkException";
+}
+
+export class MissingAuthorizationToken extends HttpException {
+    name = "MissingAuthorizationToken";
+}

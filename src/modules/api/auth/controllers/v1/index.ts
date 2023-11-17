@@ -1,6 +1,5 @@
-import { ApiResponse } from "@/utils/api-response-util";
 import { Body, Controller, Post, ValidationPipe } from "@nestjs/common";
-import { SignInDto, SignUpDto } from "../../dtos";
+import { SignInDto } from "../../dtos";
 import { AuthService } from "../../services";
 
 @Controller({
@@ -9,17 +8,8 @@ import { AuthService } from "../../services";
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @Post("signup")
-    async signUp(
-        @Body(ValidationPipe) signUpDto: SignUpDto
-    ): Promise<ApiResponse> {
-        return await this.authService.signUp(signUpDto);
-    }
-
     @Post("login")
-    async signIn(
-        @Body(ValidationPipe) signInDto: SignInDto
-    ): Promise<ApiResponse> {
+    async signIn(@Body(ValidationPipe) signInDto: SignInDto) {
         return await this.authService.signIn(signInDto);
     }
 }

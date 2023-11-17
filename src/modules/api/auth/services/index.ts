@@ -1,64 +1,61 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { UserService } from "@/modules/api/user/services";
 import { JwtService } from "@nestjs/jwt";
-import { SignUpDto, SignInDto } from "../dtos";
-import { DuplicateUserException } from "@/modules/api/user";
+import { SignInDto } from "../dtos";
 import * as bcrypt from "bcryptjs";
-import { Prisma } from "@prisma/client";
-import { customAlphabet, urlAlphabet } from "nanoid";
+import { UserType } from "@prisma/client";
 import { InvalidCredentialException } from "../errors";
-import { ApiResponse, buildResponse } from "@/utils/api-response-util";
+import * as Utils from "@/utils";
+import { PrismaService } from "@/modules/core/prisma/services";
+import { LoginMeta, LoginResponse, UserDataForLogin } from "../interfaces";
+import * as Config from "@/config";
 
 @Injectable()
 export class AuthService {
     constructor(
-        private userService: UserService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private prisma: PrismaService
     ) {}
 
     async hashPassword(password: string): Promise<string> {
-        return await bcrypt.hash(password, 10);
+        return await bcrypt.hash(password, Config.BCRYPT_SALT);
     }
 
     async comparePassword(password: string, hash: string): Promise<boolean> {
         return await bcrypt.compare(password, hash);
     }
 
-    async signUp(options: SignUpDto): Promise<ApiResponse> {
-        const user = await this.userService.findUserByEmail(options.email);
-        if (user) {
-            throw new DuplicateUserException(
-                "An account already exists with this email",
-                HttpStatus.BAD_REQUEST
+    async signIn(options: SignInDto): Promise<ApiResponse<LoginResponse>> {
+        const user = await this.prisma.user.findUnique({
+            where: { email: options.email },
+            select: {
+                identifier: true,
+                userType: true,
+                password: true,
+                role: {
+                    select: {
+                        name: true,
+                        slug: true,
+                        permissions: {
+                            select: {
+                                permission: {
+                                    select: {
+                                        name: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        if (!user) {
+            throw new InvalidCredentialException(
+                "Incorrect email or password",
+                HttpStatus.UNAUTHORIZED
             );
         }
-        const hashedPassword = await this.hashPassword(options.password);
-        const createUserOptions: Prisma.UserCreateInput = {
-            firstName: options.firstName,
-            lastName: options.lastName,
-            email: options.email,
-            identifier: customAlphabet(urlAlphabet, 16)(),
-            password: hashedPassword,
-        };
 
-        const createdUser = await this.userService.createUser(
-            createUserOptions
-        );
-        const accessToken = await this.jwtService.signAsync({
-            sub: createdUser.identifier,
-        });
-
-        //send sms or email notification here
-
-        return buildResponse({
-            message: "Account successfully created",
-            data: { accessToken },
-        });
-    }
-
-    async signIn(options: SignInDto): Promise<ApiResponse> {
-        const user = await this.userService.findUserByEmail(options.email);
-        if (!user) {
+        if (user.userType !== UserType.ADMIN) {
             throw new InvalidCredentialException(
                 "Incorrect email or password",
                 HttpStatus.UNAUTHORIZED
@@ -80,9 +77,25 @@ export class AuthService {
             sub: user.identifier,
         });
 
-        return buildResponse({
-            message: "User successfully logged in",
-            data: { accessToken },
+        const meta = this.buildLoginMeta(user);
+
+        return Utils.buildResponse({
+            message: "Login successful",
+            data: { accessToken, meta },
         });
+    }
+
+    private buildLoginMeta(user: UserDataForLogin): string {
+        const permissions = user.role.permissions.map((p) => p.permission.name);
+
+        const loginMeta: LoginMeta = {
+            role: {
+                name: user.role.name,
+                slug: user.role.slug,
+                permissions: permissions,
+            },
+        };
+
+        return Utils.encrypt(loginMeta);
     }
 }
