@@ -1,10 +1,8 @@
 ## Description
 
-This is a nestjs prisma webpack starter template incorporating some useful libraries such as .env variable validator, logger etc with proper linting enforcement. It also contains webhook flow using paystack as an example.
+This is an extension of Feegor Core Service dedicated to Feegor ERP.
 
 ## Install Dependencies
-
-First, clone the repo to your working directory.
 
 ```bash
 $ pnpm install
@@ -13,7 +11,7 @@ $ pnpm install
 ## Install husky
 
 ```bash
-$ pnpm prepare
+$ pnpm install
 ```
 
 ## Running the app
