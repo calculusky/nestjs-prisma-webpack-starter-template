@@ -7,10 +7,10 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
-import { UserNotFoundException } from "@/modules/api/user";
-import * as AuthError from "../errors";
-import { DataStoredInToken, RequestWithUser } from "../interfaces";
-import { PrismaService } from "@/modules/core/prisma/services";
+import { UserNotFoundException } from "@/modules/api/user/user.module";
+import * as AuthError from "../error/auth.error";
+import { DataStoredInToken, RequestWithUser } from "../interfaces/auth";
+import { PrismaService } from "@/modules/core/prisma/services/prisma.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { PaystackEvent } from "../interfaces";
+import { PaystackEvent } from "../interfaces/paystack";
 
 @Injectable()
-export class PaystackWebhookService {
+export class PaystackService {
     // constructor() {}
 
     async processWebhook(event: PaystackEvent): Promise<void> {

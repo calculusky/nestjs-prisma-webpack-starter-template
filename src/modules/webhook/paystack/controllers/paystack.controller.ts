@@ -1,16 +1,14 @@
 import { Body, Controller, Post, Res, VERSION_NEUTRAL } from "@nestjs/common";
 import { Response } from "express";
-import { PaystackEvent } from "../interfaces";
-import { PaystackWebhookService } from "../services";
+import { PaystackEvent } from "../interfaces/paystack";
+import { PaystackService } from "../services/paystack.service";
 
 @Controller({
     path: "paystack",
     version: VERSION_NEUTRAL,
 })
-export class PaystackWebhookController {
-    constructor(
-        private readonly paystackWebhookService: PaystackWebhookService
-    ) {}
+export class PaystackController {
+    constructor(private readonly paystackWebhookService: PaystackService) {}
 
     @Post()
     async processWebhook(@Body() event: PaystackEvent, @Res() res: Response) {

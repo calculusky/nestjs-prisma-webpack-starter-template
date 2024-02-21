@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class WebExtensionService {
+export class WebService {
     health() {
         return {
             success: true,

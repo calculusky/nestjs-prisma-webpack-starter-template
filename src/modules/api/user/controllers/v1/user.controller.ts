@@ -1,4 +1,4 @@
-import { AuthGuard } from "@/modules/api/auth/guard";
+import { AuthGuard } from "@/modules/api/auth/guard/auth.guard";
 import { Controller, UseGuards } from "@nestjs/common";
 
 @UseGuards(AuthGuard)

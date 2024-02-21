@@ -1,15 +1,13 @@
 import { Module } from "@nestjs/common";
-import { AuthService } from "./services";
-import { UserModule } from "../user";
+import { AuthService } from "./services/auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { jwtSecret, TOKEN_EXPIRATION } from "@/config";
-import { AuthController } from "./controllers/v1";
-export * from "./interfaces";
-export * from "./errors";
+import { AuthController } from "./controllers/v1/auth.controller";
+export * from "./interfaces/auth";
+export * from "./error/auth.error";
 
 @Module({
     imports: [
-        UserModule,
         JwtModule.register({
             global: true,
             secret: jwtSecret,

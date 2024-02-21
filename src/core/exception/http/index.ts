@@ -1,5 +1,5 @@
 import { isDevEnvironment } from "@/config";
-import { ValidationException } from "@/core/pipe/error";
+import { ValidationException } from "@/core/exception/http/pipe/error";
 import {
     ExceptionFilter,
     Catch,

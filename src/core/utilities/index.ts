@@ -4,11 +4,15 @@ import { AES } from "crypto-js";
 export function buildResponse<
     TData extends Record<string, any> = Record<string, any>
 >(options: Omit<ApiResponse<TData>, "success">): ApiResponse<TData> {
-    return {
+    const response: ApiResponse<TData> = {
         success: true,
         message: options.message,
-        data: options.data,
     };
+
+    if (options.data) {
+        response.data = options.data;
+    }
+    return response;
 }
 
 export const encrypt = (data: any) => {

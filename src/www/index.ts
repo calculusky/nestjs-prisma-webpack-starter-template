@@ -1,13 +1,12 @@
 import * as morgan from "morgan";
 
 import { HttpAdapterHost, NestFactory } from "@nestjs/core";
-import { AppModule } from "@/modules";
+import { AppModule } from "@/modules/app.module";
 import { INestApplication, VersioningType } from "@nestjs/common";
 import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.interface";
 import helmet from "helmet";
 import { AllExceptionsFilter } from "@/core/exception/http";
-import { classValidatorPipeInstance } from "@/core/pipe";
-import { PrismaService } from "@/modules/core/prisma/services";
+import { classValidatorPipeInstance } from "@/core/exception/http/pipe";
 import { frontendDevOrigin, isDevEnvironment } from "@/config";
 
 export interface CreateServerOptions {
@@ -48,8 +47,5 @@ export default async (
     app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
     app.listen(options.port);
 
-    //handle prisma enableShutDownHook interference with nest app enableShutdownHooks
-    const prismaService = app.get(PrismaService);
-    await prismaService.enableShutdownHooks(app);
     return app;
 };
