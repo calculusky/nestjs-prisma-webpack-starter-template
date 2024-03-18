@@ -3,10 +3,10 @@ import { JwtService } from "@nestjs/jwt";
 import { SignInDto } from "../dtos/auth.dto";
 import * as bcrypt from "bcryptjs";
 import { UserType } from "@prisma/client";
-import { InvalidCredentialException } from "../error/auth.error";
+import { InvalidCredentialException } from "../errors/auth.error";
 import * as Utils from "@/core/utilities";
 import { PrismaService } from "@/modules/core/prisma/services/prisma.service";
-import { LoginMeta, LoginResponse, UserDataForLogin } from "../interfaces/auth";
+import { LoginMeta, LoginResponse, UserDataForLogin } from "../types/auth";
 import * as Config from "@/config";
 
 @Injectable()

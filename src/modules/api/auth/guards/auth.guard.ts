@@ -8,8 +8,8 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
 import { UserNotFoundException } from "@/modules/api/user/user.module";
-import * as AuthError from "../error/auth.error";
-import { DataStoredInToken, RequestWithUser } from "../interfaces/auth";
+import * as AuthError from "../errors/auth.error";
+import { DataStoredInToken, RequestWithUser } from "../types/auth";
 import { PrismaService } from "@/modules/core/prisma/services/prisma.service";
 
 @Injectable()

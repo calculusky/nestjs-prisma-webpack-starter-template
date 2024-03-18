@@ -7,7 +7,7 @@ import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.int
 import helmet from "helmet";
 import { AllExceptionsFilter } from "@/core/exception/http";
 import { classValidatorPipeInstance } from "@/core/exception/http/pipe";
-import { frontendDevOrigin, isDevEnvironment } from "@/config";
+import { frontendDevOrigin, isProdEnvironment } from "@/config";
 
 export interface CreateServerOptions {
     port: number;
@@ -22,7 +22,7 @@ export default async (
         //logger: false,
     });
     const whitelist = options.whitelistedDomains ?? [];
-    if (isDevEnvironment) {
+    if (!isProdEnvironment) {
         whitelist.push(frontendDevOrigin);
     }
     const corsOptions: CorsOptions = {

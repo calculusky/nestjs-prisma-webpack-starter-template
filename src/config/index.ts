@@ -39,8 +39,8 @@ export const port: number = parseInt(process.env.PORT ?? "4000");
 //jwt
 export const jwtSecret = process.env.JWT_SECRET;
 
-//dev deployment env
-export const isDevEnvironment = process.env.DEV_ENVIRONMENT === "development";
+//prod deployment env
+export const isProdEnvironment = process.env.ENVIRONMENT === "production";
 
 //encrypt
 export const encryptSecret: string = process.env.ENCRYPT_SECRET;

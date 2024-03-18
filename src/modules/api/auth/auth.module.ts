@@ -3,8 +3,8 @@ import { AuthService } from "./services/auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { jwtSecret, TOKEN_EXPIRATION } from "@/config";
 import { AuthController } from "./controllers/v1/auth.controller";
-export * from "./interfaces/auth";
-export * from "./error/auth.error";
+export * from "./types/auth";
+export * from "./errors/auth.error";
 
 @Module({
     imports: [
